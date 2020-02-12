@@ -134,7 +134,7 @@ def load_data_small():
 
     train_ids, train_labels = load_train_data() # load all the training labels
 
-    N = 5000
+    N = 100
 
     patent_data = {}
     prepath= "../data/"
@@ -186,12 +186,22 @@ def load_data_small():
             patent_data[ID]['labels'] = train_labels[train_ids.index(ID)]
 
 
-    labeld_patent_data = [{k:x} for k, x in patent_data.items() if 'labels' in x.keys()]
-    unlabeled_patent_data = [{k:x} for k, x in patent_data.items() if 'labels' not in x.keys()]
+    labeled_patent_data = {k:x for k, x in patent_data.items() if 'labels' in x.keys()}
+    unlabeled_patent_data = {k:x for k, x in patent_data.items() if 'labels' not in x.keys()}
 
-    return labeld_patent_data, unlabeled_patent_data
+    return labeled_patent_data, unlabeled_patent_data
+
+
+def get_train_test_data(labeled_data, percentage):
+    N = len(labeled_data)
+    data = list(labeled_data.items())
+    test = random.sample(data, int(N * (1 - percentage)))
+    train = {x[0]:x[1] for x in data if x not in test}
+    test = {x[0]:x[1] for x in test}
+    return train, test
+
 
 
 
 labeled_patent_data, unlabeled_patent_data = load_data_small()
-
+train, test = get_train_test_data(labeled_patent_data, 0.7)
