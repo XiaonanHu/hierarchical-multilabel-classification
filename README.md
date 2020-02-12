@@ -6,8 +6,10 @@ After git clone https://github.com/XiaonanHu/Hierarchical_multilabel_classificat
 	In get_data.py file within the src directory, you can run load_data_small function which get N number of patents. It outputs two lists labeled_patent_data and unlabeled_patent_data (roughly 7:3). 
 
 - Data format description:  
-     labeled_patent_data = \[patent_1, patent_2, ...\]   
-     patent = {ID : {'title':..., 'abstract':..., 'description':..., 'labels':\[...\]}}  
+     labeled_patent_data = {patent1_ID: patent1_value, patent2_ID: patent2_value, ...}   
+     patent
+     key: patent_ID
+     value : {'title':..., 'abstract':..., 'description':..., 'labels':\[...\]}  
      (unlabeled patents does not have 'labels')
 
 
