@@ -138,12 +138,9 @@ def load_data_small():
 
     patent_data = {}
     prepath= "../data/"
-    count = 0
-
-    title_ids, abstr_ids, descr_ids = [], [], []
 
 
-
+    # Get patent titles
     with open(prepath+"patent_TITLE.csv", 'r', encoding="utf-8") as f:
         reader = csv.reader(f, delimiter="\t")
         for i in range(12): next(reader) # skip the header and the first 11 items
@@ -159,7 +156,7 @@ def load_data_small():
             patent_data[ID] = {}
             patent_data[ID]['title'] = title
 
-
+    # Get patent abstracts
     with open(prepath+"patent_ABSTR.csv", 'r', encoding="utf-8") as f:
         reader = csv.reader(f, delimiter="\t")
         for i in range(12): next(reader) # skip the header and the first 11 items
@@ -169,7 +166,7 @@ def load_data_small():
             ID, abstract = line
             patent_data[ID]['abstract'] = html2text.html2text(html.unescape(abstract)).lstrip(';\n\n')
 
-
+    # Get patent descriptions
     with open(prepath+"patent_description.csv", 'r', encoding="utf-8") as f:
         reader = csv.reader(f, delimiter="\t")
         next(reader) # only skip the header
@@ -177,16 +174,17 @@ def load_data_small():
             # the ordering of labels in the patent_description file is different from the 
             # other two, we read more description data to make sure all the N patents
             # currently in patent_data dictionary have descriptions. 
-
             if i > 2 * N: break 
 
             ID, description = line
             if ID in patent_data.keys():
                 patent_data[ID]['description'] = html2text.html2text(html.unescape(abstract)).lstrip(';\n\n')
 
+    # Get patent labels
     for ID in patent_data.keys():
         if ID in train_ids:
             patent_data[ID]['labels'] = train_labels[train_ids.index(ID)]
+
 
     labeld_patent_data = [{k:x} for k, x in patent_data.items() if 'labels' in x.keys()]
     unlabeled_patent_data = [{k:x} for k, x in patent_data.items() if 'labels' not in x.keys()]
