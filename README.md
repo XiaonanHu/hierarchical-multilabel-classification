@@ -8,8 +8,8 @@ After git clone https://github.com/XiaonanHu/Hierarchical_multilabel_classificat
 - Data format description:  
      labeled_patent_data = {patent1_ID: patent1_value, patent2_ID: patent2_value, ...}      
      patent  
-     key: patent_ID   
-     value : {'title':..., 'abstract':..., 'description':..., 'labels':\[...\]}  
+     - key: patent_ID   
+     - value : {'title':..., 'abstract':..., 'description':..., 'labels':\[...\]}  
      (unlabeled patents does not have 'labels')
 
 
