@@ -1,6 +1,6 @@
 # Hierarchical Multilabel Classification
 
-After git clone https://github.com/XiaonanHu/Hierarchical_multilabel_classification.git, please create a data folder inside this directory and put Train.csv, Dev.csv, patent_TITLE.csv, patent_ABSTR.csv and patent_description.csv in the folder. Push to a branch (instead of master) when you add or update some files. This is industry standard. :) 
+After git clone https://github.com/XiaonanHu/Hierarchical_multilabel_classification.git, please create a data folder inside this directory and put Train.csv, Dev.csv, patent_TITLE.csv, patent_ABSTR.csv and patent_description.csv in the folder. 
 
 - Data loader:  
 	In get_data.py file within the src directory, you can run load_data_small function which get N number of patents. It outputs two lists labeled_patent_data and unlabeled_patent_data (roughly 7:3). 
