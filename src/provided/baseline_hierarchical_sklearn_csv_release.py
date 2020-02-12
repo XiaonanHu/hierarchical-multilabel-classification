@@ -26,7 +26,7 @@ import numpy as np
 #from keras.preprocessing import text, sequence
 
 
-import sklearn
+
 from sklearn.metrics import f1_score, classification_report, make_scorer
 from sklearn.pipeline import make_pipeline
 
@@ -102,7 +102,6 @@ def load_data():
     prepath= "../data/"
     train_ids=[]
     train_labels=[]
-
     with open(prepath+"Train.csv", 'r', encoding="utf-8") as f:
             reader = csv.reader(f, delimiter="\t")
             for i, line in enumerate(reader):
@@ -177,7 +176,6 @@ y_train_raw=[list(set(sum([[j[0],j[:3],j] for j in tk],[]))) for tk in y_train_s
 
 mlb = MultiLabelBinarizer()
 y_train=mlb.fit_transform(y_train_raw)
-
 
 
 
