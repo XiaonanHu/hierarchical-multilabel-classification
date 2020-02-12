@@ -8,7 +8,8 @@ It outputs two lists labeled_patent_data and unlabeled_patent_data (roughly 7:3)
 
 - Data format description:  
      labeled_patent_data = \[patent_1, patent_2, ...\]   
-     patent = {ID : {'title':..., 'abstract':...,'description':...}}
+     patent = {ID : {'title':..., 'abstract':..., 'description':..., 'labels':\[...\]}}  
+     (unlabeled patents does not have 'labels')
 
 
 
