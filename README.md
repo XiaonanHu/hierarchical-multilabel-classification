@@ -12,6 +12,3 @@ After git clone https://github.com/XiaonanHu/Hierarchical_multilabel_classificat
      - key: patent_ID  
      - value : {'title':..., 'abstract':..., 'description':..., 'labels':\[label1, label2, ...\]}  
      (unlabeled patents do not have 'labels')
-
-
-
