@@ -119,7 +119,7 @@ def load_train_data():
 
 
 
-def load_data_small():
+def load_data_small(N):
     """
     Adapted from load_data_all.
     Only get the first N data to play with.
@@ -134,7 +134,7 @@ def load_data_small():
 
     train_ids, train_labels = load_train_data() # load all the training labels
 
-    N = 100
+
 
     patent_data = {}
     prepath= "../data/"
@@ -202,6 +202,6 @@ def get_train_test_data(labeled_data, percentage):
 
 
 
-
-labeled_patent_data, unlabeled_patent_data = load_data_small()
+N = 5000
+labeled_patent_data, unlabeled_patent_data = load_data_small(N)
 train, test = get_train_test_data(labeled_patent_data, 0.7)
