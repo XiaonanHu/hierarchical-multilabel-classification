@@ -13,7 +13,7 @@ def extract_features(patent_data, extractor):
             abstract = patent_data[patent_index]['abstract']
             description = patent_data[patent_index]['description']
             # merge all titles
-            title = title[0] + ' '+ title[1] + ' ' + title[2]
+            title = title[0] + ' ' + title[1] + ' ' + title[2]
 
             # get embeddings
             title_embedding = []

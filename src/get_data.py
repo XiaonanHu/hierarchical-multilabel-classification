@@ -32,6 +32,7 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.svm import LinearSVC
 
 from bs4 import BeautifulSoup
+from utils import *
 
 
 csv.field_size_limit(sys.maxsize)
@@ -113,7 +114,12 @@ def load_train_data():
                 ids = line[0]
                 labels =line[1:]
                 train_ids.append(ids)
-                train_labels.append(labels)
+                l_list = []
+                for l in labels:
+                    l_encoded = encode_label(l)
+                    l_list.append(l_encoded)
+                #train_labels.append(labels)
+                train_labels.append(l_list)
 
     return train_ids, train_labels
 
@@ -202,6 +208,6 @@ def get_train_test_data(labeled_data, percentage):
 
 
 
-N = 5000
+N = 500
 labeled_patent_data, unlabeled_patent_data = load_data_small(N)
 train, test = get_train_test_data(labeled_patent_data, 0.7)
