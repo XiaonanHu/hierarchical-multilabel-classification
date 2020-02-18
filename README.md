@@ -14,21 +14,30 @@ After git clone https://github.com/XiaonanHu/Hierarchical_multilabel_classificat
      (unlabeled patents do not have 'labels')
 
 ## extract embedding
-**extract_features.py** is provided to extract embeddings for the patent.  
+**extract_features.py** is provided to extract embeddings for the patent.
+
+### TF-IDF
+TF-IDF is used to find the most informative words for each patent in its title, abstract and description.
 
 ### Glove
-Now the pretrained GloVe model [1] is used to extract embeddings from the title, abstract and description.
+Now the pretrained GloVe model [1] is utilized to generate embeddings for the informative words.
 
 1. Please download **glove.twitter.27B.zip** [here](https://nlp.stanford.edu/projects/glove/), unzip the file, and put the **glove.twitter.27B** folder into the **pretrained_model/glove** folder. 
 2. Run **pretrained_model/glove/glove2word2vec.py**.
 3. **extract_features.py** is provided to extract embeddings for the patent.  
 	*  Since only the pretrained model is used now, some words are not in the dictionary, and these words are simply ignored for now.
-	* output format:  
-		feature  
-     		- key: patent_ID    
-     		- value : {'title':..., 'abstract':..., 'description':..., 'labels':\[label1, label2, ...\]} 
-	* e.g. `feature = extract_features(unlabeled_patent_data, extractor = "glove")`  
-	`feature['1234567']['title'].shape` is (10, 25), where 10 is the number of words, and 25 is the length of embedding for each word.
+
+### Usage: 
+```
+labeled_patent_data, unlabeled_patent_data = load_data_small(1000)
+feature = extract_features(unlabeled_patent_data, extractor = "tfidf+glove", K=20)
+```
+* parameter **K** is the number of informative words we use.
+
+
+### output format:  
+{patent1_ID: patent1_feature, patent2_ID: patent2_feature, ...} 
+* `patent_feature.shape` is `(number of words, 25)`
 	
 	
 Reference:  
