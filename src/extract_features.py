@@ -13,8 +13,9 @@ def extract_features(patent_data, extractor):
             abstract = patent_data[patent_index]['abstract']
             description = patent_data[patent_index]['description']
             # merge all titles
-            title = title[0] + ' ' + title[1] + ' ' + title[2]
-
+            #title = title[0] + ' ' + title[1] + ' ' + title[2]
+            title = title[1]
+            
             # get embeddings
             title_embedding = []
             abstract_embedding = []
@@ -43,7 +44,8 @@ def extract_features(patent_data, extractor):
 if __name__ == '__main__':
     from get_data import load_data_small
     import os
-    labeled_patent_data, unlabeled_patent_data = load_data_small()
+    labeled_patent_data, unlabeled_patent_data = load_data_small(100)
     print("number of patent:", len(labeled_patent_data))
     features = extract_features(labeled_patent_data, extractor = "glove")
+
     os.system("pause")
