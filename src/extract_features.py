@@ -3,6 +3,8 @@ from tqdm import tqdm
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
+import os
+
 
 def takeSecond(elem):
     return elem[1]
@@ -85,19 +87,36 @@ def extract_features(patent_data, extractor, K = None):
         for i in tqdm(range(len(patent_index_list))):
             embedding_num = 0
             patent_embedding = []
+            embedding[patent_index_list[i]] = {}
+
             for informative_word_index in informative_index[i]:
                 if not bag_of_words[informative_word_index] in glove_model.wv.vocab:
                     continue
+
                 patent_embedding.append(glove_model[bag_of_words[informative_word_index]])
                 embedding_num += 1
+
                 if embedding_num == K:
                     break
+
+            if 'labels' in patent_data[patent_index_list[i]].keys():
+                labels = patent_data[patent_index_list[i]]['labels']
+            else:
+                raise('Labels not found.')
+
             patent_embedding = np.array(patent_embedding)
-            embedding[patent_index_list[i]] = patent_embedding
+            embedding[patent_index_list[i]]['embedding'] = patent_embedding
+            embedding[patent_index_list[i]]['labels'] = labels
+
 
     return embedding
 
+
+    
+
 def get_patent_feature_vector(all_embeds):
+    ''' Function not used.'''
+
     feature_vectors = {}
     for ID in all_embeds.keys():
 
@@ -124,7 +143,6 @@ def get_patent_feature_vector(all_embeds):
         description = description[:200,:].flatten()
         description = description.reshape((1, len(description)))
         vec = np.hstack((vec, description))
-        
 
         feature_vectors[ID] = vec
 
@@ -133,15 +151,16 @@ def get_patent_feature_vector(all_embeds):
 
 
 
-
+'''
 #if __name__ == '__main__':
 from get_data import load_data_small
-import os
-labeled_patent_data, unlabeled_patent_data = load_data_small(1000)
+
+labeled_patent_data, unlabeled_patent_data = load_data_small(100)
 print("number of patent:", len(labeled_patent_data))
-features = extract_features(labeled_patent_data, extractor = "glove")
-vectors = get_patent_feature_vector(features)
-print('len(vectors)',len(vectors))
-print('len(vectors[vectors.keys()[0])', len(vectors[vectors.keys()[0]]))
+features = extract_features(labeled_patent_data, extractor = "tfidf+glove", K=200)
+#vectors = get_patent_feature_vector(features)
+#print('len(vectors)', len(vectors))
+#print('len(vectors[vectors.keys()[0])', len(vectors[vectors.keys()[0]]))
 
 #os.system("pause")
+'''

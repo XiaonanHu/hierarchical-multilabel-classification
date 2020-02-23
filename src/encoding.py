@@ -81,14 +81,9 @@ def encoding(dict_data, list_keys, list_subkeys, encoder):
         return features_out
 
 
-# In[10]:
-
-
 result_f = padding(arr_X, 217, 25)
 print(result_f.shape)
 
-
-# In[69]:
 
 
 from sklearn import preprocessing
@@ -100,34 +95,4 @@ pipe =pipeline.Pipeline([('encode',pca),('scaler',scaler)])
 output = pipe.fit_transform(X_f)
 print(output.shape)
 np.save('encoded', output)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
 

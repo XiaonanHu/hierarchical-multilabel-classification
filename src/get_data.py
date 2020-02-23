@@ -114,41 +114,19 @@ def load_train_data():
                 ids = line[0]
                 labels =line[1:]
                 train_ids.append(ids)
-                l_list = []
-                for l in labels:
-                    l_encoded = encode_label(l)
-                    l_list.append(l_encoded)
+                #l_list = []
+                #for l in labels:
+                #    l_encoded = encode_label(l)
+                #    l_list.append(l_encoded)
                 train_labels.append(labels)
                 #train_labels.append(l_list)
 
     return train_ids, train_labels
 
 
-_,train_labels = load_train_data()
-sec_list = []
-tot_list = []
-cla_list = []
-sub_list = []
 '''
-print('here', len(train_labels))
-sys.exit(0)
-for labels in train_labels:
-    for l in labels:
-        if l not in tot_list:
-            tot_list.append(l)
-        if l[0] not in sec_list:
-            sec_list.append(l[0])
-        if l[1:3] not in cla_list:
-            cla_list.append(l[1:3])
-        if l[3] not in sub_list:
-            sub_list.append(l[3])
-print(len(sec_list), sec_list)
-print(len(sub_list), sub_list)
-print(len(cla_list), cla_list)
-print(len(tot_list))
+In train.csv, there are 
 '''
-
-
 
 
 def load_data_small(N):

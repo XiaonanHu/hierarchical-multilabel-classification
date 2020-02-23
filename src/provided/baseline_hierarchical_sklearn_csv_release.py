@@ -99,7 +99,7 @@ def load_data():
     Needs following files: Train.csv, Dev.csv, patent_ABSTR.csv, patent_TITLE.csv, patent_description.csv
     """
     #read ids, labels
-    prepath= "../data/"
+    prepath= "../../data/"
     train_ids=[]
     train_labels=[]
     with open(prepath+"Train.csv", 'r', encoding="utf-8") as f:
@@ -125,11 +125,12 @@ def load_data():
     x_train={}
     x_dev= {}
     TAG_RE = re.compile(r'<[^>]+>')
-    files=[prepath+"patent_ABSTR.csv",prepath+"patent_TITLE.csv",prepath+"patent_description.csv"]
+    files=[prepath+"patent_ABSTR.csv",prepath+"patent_TITLE.csv"] #,prepath+"patent_description.csv"
     for f1,fname in enumerate(files):
          with open(fname, 'r', encoding="utf-8") as f:
              reader = csv.reader(f, delimiter="\t")
              for i, line in enumerate(reader):
+                 if i >= 1000: break
                  if i==0:
                      continue
                  ids = line[0]
@@ -146,16 +147,17 @@ def load_data():
                              else:
                                  x[0][ids]=TAG_RE.sub('', line[1])
 
-    x_train = [ x_train[tk] for tk  in train_ids if tk!="Labels"]
-    x_dev = [ x_dev[tk] for tk  in dev_ids  if tk!="Labels"]
-    
-    return train_ids, x_train, train_labels, dev_ids, x_dev, dev_labels
+    x_train_data = [ x_train[tk] for tk  in train_ids if tk!="Labels" and tk in x_train.keys()]
+    x_dev_data = [ x_dev[tk] for tk  in dev_ids  if tk != "Labels" and tk in x_dev.keys()]
+    train_labels = [train_labels[i] for i in range(len(train_ids)) if train_ids[i] in x_train.keys()]
+
+    return train_ids, x_train_data, train_labels, dev_ids, x_dev_data, dev_labels
 
 # =================================  Loading dataset  ====================================
 
 if "x_train_str" not in globals():
     train_ids, x_train_str, y_train_str, dev_ids, x_dev_str, y_dev_str = load_data()
-
+print('After load data')
 # =================================  Preparing Labels  ====================================
 
 ## check if labels are lists of lists
@@ -168,6 +170,7 @@ for lab_set, label_set_p in [(y_train_str,y_train_str_p)]:
             label_set_p.append(lab)
         else:
             label_set_p.append([lab])
+print('Here 1')
 
 
 ## split labels in parent and child in the fashion: "G04D" -> "G","G04","G04D", important for submission
@@ -175,9 +178,9 @@ y_train_raw=[list(set(sum([[j[0],j[:3],j] for j in tk],[]))) for tk in y_train_s
 
 
 mlb = MultiLabelBinarizer()
-y_train=mlb.fit_transform(y_train_raw)
+y_train = mlb.fit_transform(y_train_raw)
 
-
+print('Here 2')
 
 print('train/val length: %d / %d ' %(len(x_train_str), len(x_dev_str)))
 print('Average train sequence length: {}'.format(
@@ -206,14 +209,21 @@ clf = HierarchicalClassifier(
     base_estimator=base_estimator,
     class_hierarchy=class_hierarchy,
     algorithm="lcn", training_strategy="siblings",
-    preprocessing=True,
+    #preprocessing=True,
     mlb=mlb,
-    use_decision_function=True
+    #use_decision_function=True
 )
 
 print("training classifier")
+print(len(x_train_str), len(y_train))
 
 X_train_s, X_test_s, y_train_s, y_test_s = train_test_split(x_train_str,y_train, random_state=42, test_size=0.2)
+print('X_train_s.shape', len(X_train_s), len(X_train_s[0]))
+for x in X_train_s:
+    print(len(x))
+sys.exit(1)
+print('y_train_s.shape', len(y_train_s), y_train_s[0].shape)
+
 clf.fit(X_train_s, y_train_s)
 print("predicting")
 
