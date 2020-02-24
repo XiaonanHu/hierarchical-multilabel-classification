@@ -42,6 +42,7 @@ class AWX(Dense):
             **kwargs
         )
     
+
     def compute_output_shape(self, input_shape):
         assert input_shape and len(input_shape) >= 2
         assert input_shape[-1]
@@ -49,8 +50,10 @@ class AWX(Dense):
         output_shape[-1] = self.R.shape[1]
         return tuple(output_shape)
     
+
     def n_norm(self, x, epsilon=1e-6):
         return K.pow(K.clip(K.sum(K.pow(x, self.n), -1), epsilon, 1-epsilon), 1./self.n)
+
 
     def call(self, inputs):
         output = K.dot(inputs, self.kernel)

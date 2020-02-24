@@ -11,7 +11,7 @@ class IPC_node:
 
 		self.type = t
 		self.symbol = None
-		
+		self.description = None
 
 	def add_child(self, child):
 		self.children.append(child)
@@ -44,10 +44,8 @@ class IPC_tree:
 			if n.nodeName == 'ipcEntry' and ('kind', 's') in n.attributes.items():
 				s = IPC_node(self.root, 'section')
 				s.add_symbol(n.attributes)
-
 				self.section_count += 1
 				self.sections.append(s.symbol)
-
 				self.parse_section(n, s)
 
 
@@ -73,6 +71,7 @@ class IPC_tree:
 				#clas.add_child(sub_c)
 				self.subclass_count += 1
 				self.subclasses.append(sub_c.symbol)
+				
 				self.subclass_nodes.append(n)
 
 				self.parse_subclass(n, sub_c)
@@ -85,6 +84,7 @@ class IPC_tree:
 
 
 xml_tree = xml.dom.minidom.parse('../data/EN_ipc_scheme_20190101.xml')
+
 IPC = IPC_tree(xml_tree)
 IPC.parse_tree()
 
