@@ -38,6 +38,15 @@ feature = extract_features(unlabeled_patent_data, extractor = "tfidf+glove", K=2
 ### output format:  
 {patent1_ID: patent1_feature, patent2_ID: patent2_feature, ...} 
 * `patent_feature.shape` is `(number of words, 25)`
+
+## Label text embedding
+```
+package = parse_text('../data/symbol2name.json')
+embedding = get_subclass_text_embedding(package, K=30)
+```
+Use tf-idf to extract K most informative words in the description of each subclass, then utilize the pretrained GloVe model to generate embeddings.
+
+Note: some subclasses don't have any text. There embedding is `None` for now.
 	
 	
 Reference:  
