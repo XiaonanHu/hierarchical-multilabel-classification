@@ -5,7 +5,10 @@ from sklearn.metrics import f1_score, average_precision_score, precision_recall_
 
 
 
-def classify(train, test, val):
+def classify(train, test, val, epoch, indices):
+    section_num, class_num, subclass_num = indices
+
+
     clf = keras.models.Sequential([
     keras.layers.Dense(
         500,
@@ -51,7 +54,7 @@ def classify(train, test, val):
             val.X,
             val.Y,
         ],
-        epochs=2000, 
+        epochs=epoch, 
         batch_size=32,
         initial_epoch=0,
         callbacks=[
@@ -63,7 +66,37 @@ def classify(train, test, val):
     Y_prob_train = clf.predict(train.X)
     Y_prob_test = clf.predict(test.X)
 
-    print(average_precision_score(test.Y[:,test.Y.sum(0)!=0], Y_prob_test[:,test.Y.sum(0)!=0], average='micro'))
+    #Y_pred = (Y_prob_test > 0.5) 
+    Y_pred = np.where(Y_prob_test >= 0.5, 1, 0)
+    Y_pred_train = np.where(Y_prob_train >= 0.5, 1, 0)
+    print('Y_pred', Y_pred)
+    #print('test.Y.sum(0)!=0',test.Y.sum(0)!=0, 'len(test.Y.sum(0))', len(test.Y.sum(0)))
+    #print('test.A.sum(1)==0',test.A.sum(1)==0, 'len(test.A.sum(1))', len(test.A.sum(1)))
+
+
+    cases = ['SECTION', 'CLASS', 'SUBCLASS']
+    case_indices = [list(range(1,1+section_num)), list(range(1+section_num,1+section_num+class_num)),
+                    list(range(1+section_num+class_num,Y_pred.shape[1]))]
+
+    print('Original:')
+    print('Train:')
+    print('     average_precision_score', average_precision_score(train.Y[:,train.Y.sum(0)!=0], Y_pred_train[:,train.Y.sum(0)!=0], average='micro'))
+    print('     f1_score', f1_score(train.Y[:,train.Y.sum(0)!=0], Y_pred_train[:,train.Y.sum(0)!=0], average='weighted'))
+    print('Test:')
+    print('     average_precision_score', average_precision_score(test.Y[:,test.Y.sum(0)!=0], Y_pred[:,test.Y.sum(0)!=0], average='micro'))
+    print('     f1_score', f1_score(test.Y[:,test.Y.sum(0)!=0], Y_pred[:,test.Y.sum(0)!=0], average='weighted'))
+
+
+    for i, name in enumerate(cases):
+        index = case_indices[i]
+        print('\n\nFor case', name)
+        print('Training dataset:')
+        print('     average_precision_score', average_precision_score(train.Y[:,index], Y_pred_train[:,index], average='micro'))
+        print('     f1_score', f1_score(train.Y[:,index], Y_pred_train[:,index], average='weighted'))
+        
+        print('\nTesting dataset:')
+        print('     average_precision_score', average_precision_score(test.Y[:,index], Y_pred[:,index], average='micro'))
+        print('     f1_score', f1_score(test.Y[:,index], Y_pred[:,index], average='weighted'))
 
     return clf
 

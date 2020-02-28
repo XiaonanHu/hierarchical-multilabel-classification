@@ -66,9 +66,16 @@ def extract_features(patent_data, extractor, K = None):
         corpus = []
         patent_index_list = []
         for patent_index in tqdm(patent_data.keys()):
+
             title = patent_data[patent_index]['title']
-            abstract = patent_data[patent_index]['abstract']
-            description = patent_data[patent_index]['description']
+            try:
+                abstract = patent_data[patent_index]['abstract']
+            except KeyError:
+                abstract = ''
+            try:
+                description = patent_data[patent_index]['description']
+            except KeyError:
+                description = ''
             # merge all titles
             title = title[0] + ' '+ title[1] + ' ' + title[2]
             text = title + ' ' + abstract + ' ' + description
@@ -143,7 +150,6 @@ def get_patent_feature_vector(all_embeds):
         description = description[:200,:].flatten()
         description = description.reshape((1, len(description)))
         vec = np.hstack((vec, description))
-
         feature_vectors[ID] = vec
 
 

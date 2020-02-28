@@ -31,7 +31,6 @@ class IPC_tree:
 		self.sections = []
 		self.classes = []
 		self.subclasses = []
-
 		self.subclass_nodes = []
 
 		self.root = IPC_node(None, 'root')

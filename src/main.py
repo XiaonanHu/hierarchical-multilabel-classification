@@ -29,9 +29,9 @@ def construct_train_test_val_datasets(data, all_labels, A):
 	Y = encode_label_hierarchical(Y, all_labels)
 
 
-	train = indices[:int(N*0.7)] # 70% data used for training
-	test = indices[int(N*0.7) : int(N*0.9)] # 20% data used for testing
-	val = indices[int(N*0.9):] # 10% data used for validation
+	train = indices[:int(N*0.5)] # 70% data used for training
+	test = indices[int(N*0.5) : int(N*0.8)] # 20% data used for testing
+	val = indices[int(N*0.8):] # 10% data used for validation
 
 	train = data_set(X[train, :], Y[train, :], A)
 	test = data_set(X[test, :], Y[test, :], A)
@@ -44,17 +44,18 @@ def construct_train_test_val_datasets(data, all_labels, A):
 
 
 
-labeled_patent_data, unlabeled_patent_data = load_data_small(2000)
+labeled_patent_data, unlabeled_patent_data = load_data_small(10000)
 label_list = [labeled_patent_data[k]['labels'] for k in labeled_patent_data.keys()]
 sections, classes, subclasses = get_all_labels(label_list) # returns A, B, .. | A01, A02, ..| A01B, A01C, ..
-data = extract_features(labeled_patent_data, extractor = "tfidf+glove", K=500)
+data = extract_features(labeled_patent_data, extractor = "tfidf+glove", K=300)
 
 A = construct_adjacency_matrix(sections, classes, subclasses)
 
 all_labels = sections + classes + subclasses
 train, test, val = construct_train_test_val_datasets(data, all_labels, A)
 
-results = classify(train, test, val)
+results = classify(train, test, val, 300, [len(sections), len(classes), len(subclasses)]) # epoch num = 500
+
 
 
 
