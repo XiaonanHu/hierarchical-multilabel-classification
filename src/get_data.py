@@ -188,7 +188,9 @@ def load_data_small(N):
 
             ID, description = line
             if ID in patent_data.keys():
-                patent_data[ID]['description'] = html2text.html2text(html.unescape(abstract)).lstrip(';\n\n')
+                des = html2text.html2text(html.unescape(abstract)).lstrip(';\n\n')
+                des = re.sub('\n', ' ', re.sub('-\n', '-', des)).rstrip()
+                patent_data[ID]['description'] = des 
 
     # Get patent labels
     for ID in patent_data.keys():
@@ -211,7 +213,7 @@ def get_train_test_data(labeled_data, percentage):
     return train, test
 
 
-'''
-N = 500
+
+N = 50
 labeled_patent_data, unlabeled_patent_data = load_data_small(N)
-train, test = get_train_test_data(labeled_patent_data, 0.7)'''
+train, test = get_train_test_data(labeled_patent_data, 0.7)
