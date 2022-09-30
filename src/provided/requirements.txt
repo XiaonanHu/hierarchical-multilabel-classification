@@ -2,7 +2,7 @@ beautifulsoup4==4.8.2
 bs4==0.0.1
 decorator==4.4.1
 html2text==2020.1.16
-joblib==0.14.1
+joblib==1.2.0
 networkx==2.4
 nltk==3.4.5
 numpy==1.18.1
